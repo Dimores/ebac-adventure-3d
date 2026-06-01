@@ -3,68 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-public class StateMachine : MonoBehaviour
+namespace Ebac.StateMachine
 {
-    public enum States
+    public class StateMachine<T> where T : System.Enum
     {
-        NONE,
-    }
+        public Dictionary<T, StateBase> dictionaryStates;
+        private StateBase _currentState;
+        public float timeToStartGame = 1.0f;
 
-    public Dictionary<States, StateBase> dictionaryStates;
-    private StateBase _currentState;
-    public float timeToStartGame = 1.0f;
+        public StateBase CurrentState => _currentState;
 
-    private void Awake()
-    {
-        dictionaryStates = new Dictionary<States, StateBase>();
-        dictionaryStates.Add(States.NONE, new StateBase());
-
-        SwitchState(States.NONE);
-
-        Invoke(nameof(StartGame), timeToStartGame);
-    }
-
-    [Button]
-    private void StartGame()
-    {
-        SwitchState(States.NONE);
-    }
-
-#if UNITY_EDITOR
-    #region DEBUG
-
-    [Button]
-    private void ChangeStateToStateX()
-    {
-        SwitchState(States.NONE);
-    }
-
-    [Button]
-    private void ChangeStateToStateY()
-    {
-        SwitchState(States.NONE);
-    }
-    #endregion
-#endif
-
-    [Button]
-    private void SwitchState(States state)
-    {
-        if (_currentState != null) _currentState.OnStateExit();
-        _currentState = dictionaryStates[state];
-        _currentState.OnStateEnter();
-    }
-
-    private void Update()
-    {
-        if (_currentState != null)
+        public void Init()
         {
-            _currentState.OnStateStay();
+            dictionaryStates = new Dictionary<T, StateBase>();
         }
 
-        if (Input.GetKeyDown(KeyCode.O))
+        public void RegisterStates(T state, StateBase stateBase)
         {
-            //SwitchState(States.DEAD);
+            dictionaryStates.Add(state, stateBase);
+        }
+
+        [Button]
+        public void SwitchState(T state)
+        {
+            if (_currentState != null) _currentState.OnStateExit();
+            _currentState = dictionaryStates[state];
+            _currentState.OnStateEnter();
+        }
+
+        public void Update()
+        {
+            if (_currentState != null) _currentState.OnStateStay();
         }
     }
 }
