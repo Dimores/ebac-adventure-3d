@@ -10,21 +10,33 @@ public class Player : MonoBehaviour
 
     public float speed = 1f; 
     public float turnSpeed = 1f; 
-    public float gravity = 9.8f; 
+    public float gravity = 9.8f;
+    public float jumpSpeed = 15f;
+    public float runSpeed = 1.5f;
 
     private float vSpeed = 0f; 
-    
+    private string run = "Run";
+    private string jump = "Jump";
+
     void Update() {
         characterTransform.Rotate(0, Input.GetAxisRaw("Horizontal") * turnSpeed * Time.deltaTime, 0);
 
         var inputAxisVertical = Input.GetAxisRaw("Vertical"); 
         var speedVector = characterTransform.forward * inputAxisVertical * speed;
 
-        vSpeed = gravity * Time.deltaTime;
+        if(characterController.isGrounded) {
+            vSpeed = 0f;
+            if (Input.GetButtonDown(jump)) {
+                vSpeed = jumpSpeed;
+            }
+        }
+
+        vSpeed -= gravity * Time.deltaTime;
         speedVector.y = vSpeed;
 
-        characterController.Move(speedVector * Time.deltaTime); 
+        characterController.Move(Input.GetButton(run) ? speedVector * runSpeed * Time.deltaTime : speedVector * Time.deltaTime); 
 
-        animator.SetBool("Run", inputAxisVertical != 0);
+        animator.SetBool(run, inputAxisVertical != 0);
+        animator.speed = Input.GetButton(run) ? runSpeed : 1f;
     }
 }
