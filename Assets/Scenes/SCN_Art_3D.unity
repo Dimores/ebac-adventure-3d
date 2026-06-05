@@ -8957,7 +8957,7 @@ GameObject:
   - component: {fileID: 1754571493}
   - component: {fileID: 1754571492}
   - component: {fileID: 1754571491}
-  - component: {fileID: 1754571489}
+  - component: {fileID: 1754571494}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -8965,22 +8965,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1754571489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1754571488}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2424c3066712b74b9baf749ef109fc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabProjectile: {fileID: 5787593748152708519, guid: 2f24befe7e0453e48b284169dddaa210, type: 3}
-  positionToShoot: {fileID: 1746053562}
-  timeBeetweenShoot: 0.3
-  keyCode: 122
 --- !u!23 &1754571491
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9047,6 +9031,23 @@ Transform:
   - {fileID: 1746053562}
   m_Father: {fileID: 1755247086}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1754571494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754571488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad31f2b93c1c1294a83d4a7ed31684c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabProjectile: {fileID: 5787593748152708519, guid: 2f24befe7e0453e48b284169dddaa210, type: 3}
+  positionToShoot: {fileID: 1746053562}
+  timeBeetweenShoot: 0.3
+  maxShoot: 5
+  timeToReload: 1
 --- !u!1001 &1755247079
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10554,6 +10555,7 @@ GameObject:
   - component: {fileID: 1983944448}
   - component: {fileID: 1983944447}
   - component: {fileID: 1983944446}
+  - component: {fileID: 1983944449}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -10623,6 +10625,19 @@ Transform:
   - {fileID: 1755247086}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1983944449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983944445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f91a8a361387c14f8fa080be9b57879, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunBase: {fileID: 1754571494}
 --- !u!1 &1995866850
 GameObject:
   m_ObjectHideFlags: 0

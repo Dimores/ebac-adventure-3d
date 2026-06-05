@@ -38,5 +38,8 @@ public class Player : MonoBehaviour
 
         animator.SetBool(run, inputAxisVertical != 0);
         animator.speed = Input.GetButton(run) ? runSpeed : 1f;
+
+        if (inputAxisVertical != 0)
+            animator.SetFloat("AnimSpeed", inputAxisVertical < 0 ? -1f : 1f);
     }
 }

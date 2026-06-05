@@ -4,6 +4,8 @@ public class PlayerAbilityBase : MonoBehaviour
 {
     protected Player player;
 
+    protected Inputs inputs;
+
     private void OnValidate()
     {
         if(player == null) player = GetComponent<Player>();
@@ -11,9 +13,22 @@ public class PlayerAbilityBase : MonoBehaviour
 
     private void Start()
     {
+        inputs = new Inputs();
+        inputs.Enable();
+
         Init();
         OnValidate();
         RegisterListeners();
+    }
+
+    private void OnEnable()
+    {
+        inputs?.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputs?.Disable();
     }
 
     private void OnDestroy()
