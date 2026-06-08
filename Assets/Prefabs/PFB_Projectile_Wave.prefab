@@ -114,10 +114,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7964700609358706834}
-  - component: {fileID: 5787593748152708519}
   - component: {fileID: 2930169523019614946}
+  - component: {fileID: -4258492616696171616}
   m_Layer: 0
-  m_Name: PFB_Projectile
+  m_Name: PFB_Projectile_Wave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,21 +139,6 @@ Transform:
   - {fileID: 5306617929137761442}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5787593748152708519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6015708458932240596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65ea378c78afa1244ac7e6d818d70776, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeToDestroy: 2
-  damageAmount: 1
-  speed: 50
 --- !u!96 &2930169523019614946
 TrailRenderer:
   serializedVersion: 3
@@ -267,3 +252,20 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
+--- !u!114 &-4258492616696171616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6015708458932240596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f39896ad79fa94b9a135a97f68eed6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeToDestroy: 2
+  damageAmount: 1
+  speed: 50
+  waveAmplitude: 8
+  waveFrequency: 10

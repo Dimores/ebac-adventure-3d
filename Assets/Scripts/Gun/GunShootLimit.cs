@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GunShootLimit : GunBase
@@ -7,44 +8,97 @@ public class GunShootLimit : GunBase
     public int maxShoot = 5;
     public float timeToReload = 1f;
 
-    private int _currentShoots;
-    private bool _isReloading = false;
+    [Header("Gun UI")]
+    public List<UIGunUpdater> uIGunUpdaters;
 
-    override protected IEnumerator ShootCoroutine()
+    protected int _currentShoots;
+    protected bool _isReloading;
+
+    private void Start()
     {
-        if (_isReloading) yield break;
+        uIGunUpdaters = UIUpdaterManager.Instance.uIGunUpdaters.ToList();
+    }
 
+    protected override IEnumerator ShootCoroutine()
+    {
         while (true)
         {
-            if (_currentShoots < maxShoot)
+            if (_isReloading)
             {
-                Shoot();
-                _currentShoots++;
-                CheckRecharge();
-                yield return new WaitForSeconds(timeBeetweenShoot);
+                yield return null;
+                continue;
             }
+
+            Shoot();
+
+            yield return new WaitForSeconds(timeBeetweenShoot);
         }
     }
 
-    private void CheckRecharge()
+    public override void Shoot()
     {
+        if (_isReloading)
+            return;
+
+        if (!CanShoot())
+            return;
+
+        base.Shoot();
+
+        _currentShoots++;
+
+        UpdateUI();
+
         if (_currentShoots >= maxShoot)
         {
-            StopShoot();
             StartRecharge();
         }
     }
 
-    private void StartRecharge()
+    protected void StartRecharge()
     {
+        if (_isReloading)
+            return;
+
         _isReloading = true;
+
         StartCoroutine(RechargeCoroutine());
     }
 
     IEnumerator RechargeCoroutine()
     {
-        yield return new WaitForSeconds(timeToReload);
+        float time = 0;
+
+        while (time < timeToReload)
+        {
+            time += Time.deltaTime;
+
+            uIGunUpdaters.ForEach(i =>
+                i.UpdateValue(time / timeToReload));
+
+            yield return null;
+        }
+
         _currentShoots = 0;
         _isReloading = false;
+
+        UpdateUI();
+    }
+
+    protected void UpdateUI()
+    {
+        uIGunUpdaters.ForEach(i =>
+            i.UpdateValue(maxShoot, _currentShoots));
+    }
+
+    public void RefreshUI()
+    {
+        if (uIGunUpdaters == null || uIGunUpdaters.Count == 0)
+        {
+            Debug.Log("Lista vazia!");
+            return;
+        }
+
+        UpdateUI();
     }
 }

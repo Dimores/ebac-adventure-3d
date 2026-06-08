@@ -8,7 +8,7 @@ public class PlayerInputManager : Singleton<PlayerInputManager>
     public Vector3 MovementInput { get; private set; }
     public bool JumpInput { get; private set; }
 
-    // Update is called once per frame
+
     void Update()
     {
         MovementInput = new Vector3(0, 0, Input.GetAxisRaw("Vertical"));
