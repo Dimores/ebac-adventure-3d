@@ -1,3 +1,4 @@
+using Enemy;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,12 +23,10 @@ public class ProjectileBase : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //var enemy = collision.gameObject.GetComponent<EnemyBase>();
+        var damageable = collision.gameObject.GetComponent<IDamageable>();
 
-        //if(enemy != null)
-        //{
-        //    enemy.TakeDamage(damageAmount);
-        //    Destroy(gameObject);
-        //}
+        if (damageable != null) damageable.Damage(damageAmount);
+
+        Destroy(gameObject);
     }
 }

@@ -5,12 +5,13 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public class EnemyBase : MonoBehaviour
+    public class EnemyBase : MonoBehaviour, IDamageable
     {
         [Header("Life")]
         public float startLife = 10f;
         [SerializeField] private float _currentLife;
         public float deathDelay = 3f;
+        public Collider enemyCollider;
 
         [Header("Animation")]
         [SerializeField] private AnimationBase _animationBase;
@@ -86,6 +87,7 @@ namespace Enemy
         protected void ResetLife()
         {
             _currentLife = startLife;
+            enemyCollider.enabled = true;
         }
 
         public void OnDamage(float f)
@@ -105,7 +107,10 @@ namespace Enemy
 
         protected virtual void OnKill()
         {
+            enemyCollider.enabled = false;
+
             Destroy(gameObject, deathDelay);
+
             PlayAnimationByType(AnimationType.DEATH);
         }
 
@@ -195,6 +200,10 @@ namespace Enemy
             }
         }
 
+        public void Damage(float damage)
+        {
+            OnDamage(damage);
+        }
         #endregion
     }
 }
