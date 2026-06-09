@@ -54,10 +54,7 @@ namespace Enemy
         {
             if(flashColor != null) flashColor.Flash();
 
-            if (damageVFX != null)
-            {
-                damageVFX.Play();
-            }
+            if (damageVFX != null) damageVFX.Play();
 
             _currentLife -= f;
 
