@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,14 +30,10 @@ public class PlayerAbilityShoot : PlayerAbilityBase
         currentGun = guns[0];
         currentGunIndex = 0;
 
-        StartCoroutine(DisableSecondGunNextFrame());
-    }
-
-    private IEnumerator DisableSecondGunNextFrame()
-    {
-        yield return null;
-
-        guns[1].gameObject.SetActive(false);
+        if (currentGun is GunShootLimit gunLimit)
+        {
+            gunLimit.RefreshUI();
+        }
     }
 
     protected override void RegisterListeners()
@@ -85,12 +80,9 @@ public class PlayerAbilityShoot : PlayerAbilityBase
             return;
 
         currentGun?.StopShoot();
-        currentGun?.gameObject.SetActive(false);
 
         currentGunIndex = index;
         currentGun = guns[index];
-
-        currentGun.gameObject.SetActive(true);
 
         if (currentGun is GunShootLimit gunLimit)
         {

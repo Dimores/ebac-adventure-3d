@@ -15,6 +15,7 @@ namespace Enemy
 
         [Header("Animation")]
         [SerializeField] private AnimationBase _animationBase;
+        [SerializeField] private FlashColor flashColor;
 
         [Header("Start Animation")]
         public float startAnimationDuration = .2f;
@@ -27,19 +28,11 @@ namespace Enemy
         public Color damageColor = Color.white;
         public Color damageEmissionColor = Color.white;
 
-        private readonly List<SpriteRenderer> _spriteRenderers = new();
-        private readonly List<Material> _materials = new();
-
-        private readonly Dictionary<SpriteRenderer, Color> _spriteOriginalColors = new();
-        private readonly Dictionary<Material, Color> _materialOriginalColors = new();
-        private readonly Dictionary<Material, Color> _materialOriginalEmissionColors = new();
-
-        private readonly Dictionary<Object, Tween> _activeColorTweens = new();
-        private readonly Dictionary<Material, Tween> _activeEmissionTweens = new();
+        [Header("VFX")]
+        public ParticleSystem damageVFX;
 
         private void Awake()
         {
-            CacheRenderers();
             Init();
         }
 
@@ -51,39 +44,6 @@ namespace Enemy
                 BornAnimation();
         }
 
-        private void CacheRenderers()
-        {
-            _spriteRenderers.AddRange(GetComponentsInChildren<SpriteRenderer>(true));
-
-            foreach (var sprite in _spriteRenderers)
-            {
-                _spriteOriginalColors[sprite] = sprite.color;
-            }
-
-            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
-
-            foreach (Renderer renderer in renderers)
-            {
-                Material[] materials = renderer.materials;
-
-                foreach (Material material in materials)
-                {
-                    _materials.Add(material);
-
-                    if (material.HasProperty("_Color"))
-                    {
-                        _materialOriginalColors[material] = material.color;
-                    }
-
-                    if (material.HasProperty("_EmissionColor"))
-                    {
-                        _materialOriginalEmissionColors[material] =
-                            material.GetColor("_EmissionColor");
-                    }
-                }
-            }
-        }
-
         protected void ResetLife()
         {
             _currentLife = startLife;
@@ -92,9 +52,14 @@ namespace Enemy
 
         public void OnDamage(float f)
         {
-            _currentLife -= f;
+            if(flashColor != null) flashColor.Flash();
 
-            DamageAnimation();
+            if (damageVFX != null)
+            {
+                damageVFX.Play();
+            }
+
+            _currentLife -= f;
 
             if (_currentLife <= 0)
                 Kill();
@@ -122,62 +87,6 @@ namespace Enemy
                 .DOScale(0, startAnimationDuration)
                 .SetEase(startAnimationEase)
                 .From();
-        }
-
-        private void DamageAnimation()
-        {
-            foreach (SpriteRenderer sprite in _spriteRenderers)
-            {
-                if (_activeColorTweens.TryGetValue(sprite, out Tween tween))
-                {
-                    tween.Kill();
-                }
-
-                sprite.color = damageColor;
-
-                _activeColorTweens[sprite] = sprite
-                    .DOColor(_spriteOriginalColors[sprite], damageAnimationDuration)
-                    .SetEase(damageAnimationEase);
-            }
-
-            foreach (Material material in _materials)
-            {
-                if (material.HasProperty("_Color"))
-                {
-                    if (_activeColorTweens.TryGetValue(material, out Tween tween))
-                    {
-                        tween.Kill();
-                    }
-
-                    material.color = damageColor;
-
-                    _activeColorTweens[material] = material
-                        .DOColor(
-                            _materialOriginalColors[material],
-                            damageAnimationDuration
-                        )
-                        .SetEase(damageAnimationEase);
-                }
-
-                if (material.HasProperty("_EmissionColor"))
-                {
-                    if (_activeEmissionTweens.TryGetValue(material, out Tween tween))
-                    {
-                        tween.Kill();
-                    }
-
-                    material.EnableKeyword("_EMISSION");
-                    material.SetColor("_EmissionColor", damageEmissionColor);
-
-                    _activeEmissionTweens[material] = DOTween.To(
-                            () => material.GetColor("_EmissionColor"),
-                            value => material.SetColor("_EmissionColor", value),
-                            _materialOriginalEmissionColors[material],
-                            damageAnimationDuration
-                        )
-                        .SetEase(damageAnimationEase);
-                }
-            }
         }
 
         public void PlayAnimationByType(AnimationType animationType)

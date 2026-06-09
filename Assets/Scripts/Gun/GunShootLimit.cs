@@ -14,9 +14,33 @@ public class GunShootLimit : GunBase
     protected int _currentShoots;
     protected bool _isReloading;
 
+    private float _reloadFinishTime;
+
     private void Start()
     {
         uIGunUpdaters = UIUpdaterManager.Instance.uIGunUpdaters.ToList();
+    }
+
+    private void Update()
+    {
+        if (!_isReloading)
+            return;
+
+        float remaining = _reloadFinishTime - Time.time;
+
+        if (remaining <= 0)
+        {
+            _currentShoots = 0;
+            _isReloading = false;
+
+            UpdateUI();
+            return;
+        }
+
+        float progress = 1f - (remaining / timeToReload);
+
+        uIGunUpdaters.ForEach(i =>
+            i.UpdateValue(progress));
     }
 
     protected override IEnumerator ShootCoroutine()
@@ -61,28 +85,7 @@ public class GunShootLimit : GunBase
             return;
 
         _isReloading = true;
-
-        StartCoroutine(RechargeCoroutine());
-    }
-
-    IEnumerator RechargeCoroutine()
-    {
-        float time = 0;
-
-        while (time < timeToReload)
-        {
-            time += Time.deltaTime;
-
-            uIGunUpdaters.ForEach(i =>
-                i.UpdateValue(time / timeToReload));
-
-            yield return null;
-        }
-
-        _currentShoots = 0;
-        _isReloading = false;
-
-        UpdateUI();
+        _reloadFinishTime = Time.time + timeToReload;
     }
 
     protected void UpdateUI()
@@ -93,12 +96,6 @@ public class GunShootLimit : GunBase
 
     public void RefreshUI()
     {
-        if (uIGunUpdaters == null || uIGunUpdaters.Count == 0)
-        {
-            Debug.Log("Lista vazia!");
-            return;
-        }
-
         UpdateUI();
     }
 }
