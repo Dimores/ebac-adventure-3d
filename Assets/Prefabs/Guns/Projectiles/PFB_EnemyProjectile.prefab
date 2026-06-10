@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5306617929137761442}
   - component: {fileID: 44455630775109746}
   - component: {fileID: 5688199440988484225}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,8 +96,8 @@ GameObject:
   - component: {fileID: 2930169523019614946}
   - component: {fileID: 4177991596293693845}
   - component: {fileID: 439117359042897170}
-  m_Layer: 8
-  m_Name: PFB_Projectile
+  m_Layer: 10
+  m_Name: PFB_EnemyProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
   speed: 50
   hitMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 128
 --- !u!96 &2930169523019614946
 TrailRenderer:
   serializedVersion: 3
@@ -290,7 +290,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1472
+    m_Bits: 832
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0

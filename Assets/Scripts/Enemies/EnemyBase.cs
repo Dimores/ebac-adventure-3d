@@ -13,6 +13,9 @@ namespace Enemy
         public float deathDelay = 3f;
         public Collider enemyCollider;
 
+        [Header("Looking")]
+        public bool lookAtPlayer = false;
+
         [Header("Animation")]
         [SerializeField] private AnimationBase _animationBase;
         [SerializeField] private FlashColor flashColor;
@@ -31,9 +34,24 @@ namespace Enemy
         [Header("VFX")]
         public ParticleSystem damageVFX;
 
+        private Player _player;
+
         private void Awake()
         {
             Init();
+        }
+
+        private void Start()
+        {
+            _player = GameObject.FindObjectOfType<Player>();
+        }
+
+        public virtual void Update()
+        {
+            if (lookAtPlayer)
+            {
+                transform.LookAt(_player.transform);
+            }
         }
 
         protected virtual void Init()
@@ -60,6 +78,15 @@ namespace Enemy
 
             if (_currentLife <= 0)
                 Kill();
+        }
+        public void Damage(float damage)
+        {
+            OnDamage(damage);
+        }
+        public void Damage(float damage, Vector3 dir)
+        {
+            OnDamage(damage);
+            transform.DOMove(transform.position - dir, .1f);
         }
 
         protected virtual void Kill()
@@ -96,19 +123,15 @@ namespace Enemy
 
         #endregion
 
-        #region DEBUG
-
-        private void Update()
+        #region COLLISION
+        private void OnCollisionEnter(Collision collision)
         {
-            if (Input.GetKeyDown(KeyCode.Q))
+            Player p = collision.gameObject.GetComponent<Player>();
+
+            if(p != null)
             {
-                OnDamage(5f);
+                p.Damage(1);
             }
-        }
-
-        public void Damage(float damage)
-        {
-            OnDamage(damage);
         }
         #endregion
     }

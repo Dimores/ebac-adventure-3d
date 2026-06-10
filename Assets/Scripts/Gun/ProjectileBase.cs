@@ -1,32 +1,38 @@
-using Enemy;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileBase : MonoBehaviour
 {
     public float timeToDestroy = 2f;
-
     public int damageAmount = 1;
-
     public float speed = 50f;
+
+    [Header("Hit")]
+    [SerializeField] private LayerMask hitMask;
 
     private void Awake()
     {
         Destroy(gameObject, timeToDestroy);
     }
 
-    void Update()
+    private void Update()
     {
-        transform.Translate(Vector3.forward * (Time.deltaTime * speed));
-    }
+        transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        var damageable = collision.gameObject.GetComponent<IDamageable>();
+        Collider[] hits = Physics.OverlapSphere(
+            transform.position,
+            0.3f,
+            hitMask
+        );
 
-        if (damageable != null) damageable.Damage(damageAmount);
+        foreach (var hit in hits)
+        {
+            if (hit.TryGetComponent<IDamageable>(out var damageable))
+            {
+                damageable.Damage(damageAmount);
 
-        Destroy(gameObject);
+                Destroy(gameObject);
+                return;
+            }
+        }
     }
 }
