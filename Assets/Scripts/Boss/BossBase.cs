@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ebac.StateMachine;
 using DG.Tweening;
+using System;
 
 namespace Boss
 {
@@ -19,6 +20,10 @@ namespace Boss
         [Header("Movement")]
         public float speed = 5f;
         public List<Transform> wayPoints;
+
+        [Header("Attack")]
+        public int attackAmount = 5;
+        public float timeBeetweenAttacks = .5f;
 
         [Header("Animation")]
         public float startAnimationDuration = .5f;
@@ -44,19 +49,40 @@ namespace Boss
             SwitchState(BossAction.INIT);
         }
 
-        #region MOVEMENT
-        public void GoToRandomPoint()
+        #region ATTACK
+        public void StartAttack(Action endCallback = null)
         {
-            StartCoroutine(MoveToPoint(wayPoints[Random.Range(0, wayPoints.Count)]));
+            StartCoroutine(Attack(endCallback));
         }
 
-        IEnumerator MoveToPoint(Transform t)
+        IEnumerator Attack(Action endCallback = null)
+        {
+            int attacksDone = 0;
+
+            while(attacksDone < attackAmount)
+            {
+                attacksDone++;
+                transform.DOScale(1.1f, .1f).SetLoops(2, LoopType.Yoyo);
+                yield return new WaitForSeconds(timeBeetweenAttacks);
+            }
+            endCallback?.Invoke();
+        }
+        #endregion
+
+        #region WALK
+        public void GoToRandomPoint(Action onArrive = null)
+        {
+            StartCoroutine(MoveToPoint(wayPoints[UnityEngine.Random.Range(0, wayPoints.Count)], onArrive));
+        }
+
+        IEnumerator MoveToPoint(Transform t, Action onArrive = null)
         {
             while (Vector3.Distance(transform.position, t.position) > .1f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, t.position, Time.deltaTime * speed);
                 yield return new WaitForEndOfFrame();
             }
+            onArrive?.Invoke();
         }
         #endregion
 
