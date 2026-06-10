@@ -5,9 +5,9 @@ public class PlayerStateJump : StateBase
 {
     private bool hasLeftGround;
 
-    public override void OnStateEnter(object o = null)
+    public override void OnStateEnter(params object[] objs)
     {
-        base.OnStateEnter(o);
+        base.OnStateEnter(objs);
 
         hasLeftGround = false;
 

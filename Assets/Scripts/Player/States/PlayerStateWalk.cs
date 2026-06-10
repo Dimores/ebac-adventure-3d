@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class PlayerStateWalk : StateBase
 {
-    public override void OnStateEnter(object o = null)
+    public override void OnStateEnter(params object[] objs)
     {
-        base.OnStateEnter(o);
+        base.OnStateEnter(objs);
         PlayerController.Instance.SetAnimation("Walk");
     }
 
