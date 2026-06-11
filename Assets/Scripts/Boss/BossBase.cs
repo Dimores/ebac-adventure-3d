@@ -37,11 +37,10 @@ namespace Boss
 
         private void Start()
         {
-            Init();
             healthBase.OnKill += OnBossKill;
         }
 
-        private void Init()
+        public void Init()
         {
             stateMachine = new StateMachine<BossAction>();
             stateMachine.Init();
@@ -98,9 +97,17 @@ namespace Boss
 
         IEnumerator MoveToPoint(Transform t, Action onArrive = null)
         {
-            while (Vector3.Distance(transform.position, t.position) > .1f)
+            while (true)
             {
-                transform.position = Vector3.MoveTowards(transform.position, t.position, Time.deltaTime * speed);
+                Vector3 targetPosition = t.position;
+                targetPosition.y = transform.position.y;
+
+                if (Vector3.Distance(transform.position, targetPosition) <= .1f)
+                {
+                    break;
+                }
+
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * speed);
                 yield return new WaitForEndOfFrame();
             }
             onArrive?.Invoke();
@@ -110,7 +117,9 @@ namespace Boss
         #region ANIMATION
         public void PlayStartAnimation()
         {
-            transform.DOScale(0, startAnimationDuration).SetEase(startAnimationEase).From();
+            transform.localScale = Vector3.zero;
+
+            transform.DOScale(Vector3.one, startAnimationDuration).SetEase(startAnimationEase);
         }
         #endregion
 
