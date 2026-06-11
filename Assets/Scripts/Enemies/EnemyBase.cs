@@ -34,21 +34,21 @@ namespace Enemy
         [Header("VFX")]
         public ParticleSystem damageVFX;
 
-        private Player _player;
+        protected Player _player;
 
         private void Awake()
         {
             Init();
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             _player = GameObject.FindObjectOfType<Player>();
         }
 
         public virtual void Update()
         {
-            if (lookAtPlayer)
+            if (lookAtPlayer && _player != null)
             {
                 transform.LookAt(_player.transform);
             }
@@ -70,7 +70,7 @@ namespace Enemy
 
         public void OnDamage(float f)
         {
-            if(flashColor != null) flashColor.Flash();
+            if (flashColor != null) flashColor.Flash();
 
             if (damageVFX != null) damageVFX.Play();
 
@@ -128,7 +128,7 @@ namespace Enemy
         {
             Player p = collision.gameObject.GetComponent<Player>();
 
-            if(p != null)
+            if (p != null)
             {
                 p.Damage(1);
             }

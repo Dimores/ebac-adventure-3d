@@ -13,8 +13,10 @@ namespace Enemy
         private int _currentWayPointIndex = 0;
         private bool _canMove = true;
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
+    
             _canMove = true;
             _currentWayPointIndex = 0;
         }

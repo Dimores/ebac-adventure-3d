@@ -12,7 +12,8 @@ namespace Boss
         INIT,
         IDLE,
         WALK,
-        ATTACK
+        ATTACK,
+        DEATH
     }
 
     public class BossBase : MonoBehaviour
@@ -20,6 +21,9 @@ namespace Boss
         [Header("Movement")]
         public float speed = 5f;
         public List<Transform> wayPoints;
+
+        [Header("Health")]
+        public HealthBase healthBase;
 
         [Header("Attack")]
         public int attackAmount = 5;
@@ -34,6 +38,7 @@ namespace Boss
         private void Start()
         {
             Init();
+            healthBase.OnKill += OnBossKill;
         }
 
         private void Init()
@@ -45,9 +50,25 @@ namespace Boss
             stateMachine.RegisterStates(BossAction.IDLE, new BossStateIdle());
             stateMachine.RegisterStates(BossAction.WALK, new BossStateWalk());
             stateMachine.RegisterStates(BossAction.ATTACK, new BossStateAttack());
+            stateMachine.RegisterStates(BossAction.DEATH, new BossStateDeath());
 
             SwitchState(BossAction.INIT);
         }
+
+        #region HANDLERS
+        private void OnBossKill(HealthBase healthBase)
+        {
+            SwitchState(BossAction.DEATH);
+        }
+        #endregion
+
+        #region DEBUG
+        [NaughtyAttributes.Button]
+        public void SwitchToAttackState()
+        {
+            stateMachine.SwitchState(BossAction.ATTACK, this);
+        }
+        #endregion
 
         #region ATTACK
         public void StartAttack(Action endCallback = null)
@@ -89,7 +110,6 @@ namespace Boss
         #region ANIMATION
         public void PlayStartAnimation()
         {
-            transform.localScale = Vector3.zero;
             transform.DOScale(0, startAnimationDuration).SetEase(startAnimationEase).From();
         }
         #endregion
