@@ -118,7 +118,7 @@ namespace Enemy
                 float finalDistance = Vector3.Distance(transform.position, _player.transform.position);
                 if (finalDistance <= explodeDistance + 1.0f) 
                 {
-                    _player.Damage(explosionDamage);
+                    _player.healthBase.Damage(explosionDamage);
                 }
             }
 

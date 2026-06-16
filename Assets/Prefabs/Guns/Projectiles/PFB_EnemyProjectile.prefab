@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDestroy: 2
-  damageAmount: 1
+  damageAmount: 5
   speed: 50
   hitMask:
     serializedVersion: 2

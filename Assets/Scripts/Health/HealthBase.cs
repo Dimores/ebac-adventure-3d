@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthBase : MonoBehaviour
+public class HealthBase : MonoBehaviour, IDamageable
 {
     public float startLife = 10;
     public bool destroyOnKill = false;
@@ -45,5 +45,10 @@ public class HealthBase : MonoBehaviour
         if (destroyOnKill) Destroy(gameObject, 3f);
 
         OnKill?.Invoke(this);
+    }
+
+    public void Damage(float damage, Vector3 dir)
+    {
+        Damage(damage);
     }
 }
