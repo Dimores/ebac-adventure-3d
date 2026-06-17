@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     [Header("Health")]
     public HealthBase healthBase;
     public float timeToRespawn = 2f;
+    public string respawnText = "Reviveu no Checkpoint";
 
     [Header("Colliders")]
     [SerializeField] private List<Collider> colliders;
@@ -116,6 +117,8 @@ public class Player : MonoBehaviour
         characterController.enabled = true;
 
         animator.SetTrigger("Revive");
+
+        CheckpointManager.Instance.ShowCheckpointOnUI(respawnText);
     }
 
     private void Revive()

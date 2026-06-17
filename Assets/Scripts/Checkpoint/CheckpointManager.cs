@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Ebac.Core.Singleton;
 using NaughtyAttributes;
 using UnityEngine;
@@ -12,7 +13,14 @@ public class CheckpointManager : Singleton<CheckpointManager>
 
     [Header("Offset")]
     [MinMaxSlider(0f, 20f)] 
-    public Vector2 randomOffsetInterval; 
+    public Vector2 randomOffsetInterval;
+
+    [Header("Texts to Show")]
+    public bool willShowText = true;
+    [ShowIf("willShowText")]
+    [SerializeField] private List<UITextFader> textsToShow;
+    [ShowIf("willShowText")]
+    [SerializeField] private string textPrefix = "Checkpoint ativado";
 
     private CheckpointBase _currentCheckpoint;
 
@@ -40,6 +48,7 @@ public class CheckpointManager : Singleton<CheckpointManager>
         if (i > lastCheckpointKey)
         {
             lastCheckpointKey = i;
+            ShowCheckpointOnUI(textPrefix);
         }
     }
 
@@ -49,4 +58,11 @@ public class CheckpointManager : Singleton<CheckpointManager>
 
         return _currentCheckpoint.transform.position + GenerateRandomOffset();
     }
+
+    #region UI
+    public void ShowCheckpointOnUI(string prefix = null)
+    {
+        if (willShowText) textsToShow.ForEach(i => i.Fade(lastCheckpointKey.ToString(), prefix));
+    }
+    #endregion
 }
