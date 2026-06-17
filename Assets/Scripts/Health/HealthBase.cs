@@ -17,6 +17,7 @@ public class HealthBase : MonoBehaviour, IDamageable
 
     public Action<HealthBase> OnDamage;
     public Action<HealthBase> OnKill;
+    public Action<HealthBase> OnRevive;
 
     private void Awake()
     {
@@ -28,9 +29,11 @@ public class HealthBase : MonoBehaviour, IDamageable
         ResetLife();
     }
 
-    protected void ResetLife()
+    public void ResetLife()
     {
         _currentLife = startLife;
+        UpdateUI();
+        OnRevive?.Invoke(this);
     }
 
     public void Damage(float f)

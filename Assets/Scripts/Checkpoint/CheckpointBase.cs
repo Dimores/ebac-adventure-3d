@@ -40,8 +40,10 @@ public class CheckpointBase : MonoBehaviour
     #region SAVE
     private void SaveCheckpoint()
     {
-        if(PlayerPrefs.GetInt(checkpointKey, 0) > key)
-            PlayerPrefs.SetInt(checkpointKey, key);
+        //if(PlayerPrefs.GetInt(checkpointKey, 0) > key)
+        //    PlayerPrefs.SetInt(checkpointKey, key);
+
+        CheckpointManager.Instance.SaveCheckpoint(key);
 
         checkpointActive = true;
     }

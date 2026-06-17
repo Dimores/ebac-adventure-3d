@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
 
     [Header("Health")]
     public HealthBase healthBase;
+    public float timeToRespawn = 2f;
 
     [Header("Colliders")]
     [SerializeField] private List<Collider> colliders;
@@ -35,6 +36,8 @@ public class Player : MonoBehaviour
     public bool IsDead {  get { return _isDead; } }
     #endregion
 
+    #region UNITY_METHODS
+
     private void OnValidate()
     {
         if(healthBase == null) healthBase = GetComponent<HealthBase>();
@@ -49,29 +52,6 @@ public class Player : MonoBehaviour
 
         _isDead = false;
     }
-
-    #region LIFE
-    public void Damage(HealthBase h)
-    {
-        flashColors.ForEach(flashColor => flashColor.Flash());
-    }
-
-    public void Damage(float damage, Vector3 dir)
-    {
-        //Damage(damage);
-    }
-
-    private void Kill(HealthBase h)
-    {
-        if(_isDead == false)
-        {
-            _isDead = true;
-            animator.SetTrigger("Death");
-            colliders.ForEach(i => i.enabled = false);
-        } 
-    }
-    #endregion
-
     void Update() {
 
         if (_isDead) return;
@@ -99,4 +79,53 @@ public class Player : MonoBehaviour
         if (inputAxisVertical != 0)
             animator.SetFloat("AnimSpeed", inputAxisVertical < 0 ? -1f : 1f);
     }
+    #endregion
+
+    #region LIFE
+    public void Damage(HealthBase h)
+    {
+        flashColors.ForEach(flashColor => flashColor.Flash());
+    }
+
+    public void Damage(float damage, Vector3 dir)
+    {
+        //Damage(damage);
+    }
+
+    private void Kill(HealthBase h)
+    {
+        if(_isDead == false)
+        {
+            _isDead = true;
+            animator.SetTrigger("Death");
+            colliders.ForEach(i => i.enabled = false);
+
+            if (CheckpointManager.Instance.HasCheckpoint())
+                Invoke("Revive", timeToRespawn);
+            else
+                Debug.Log("Morreu sem checkpoint, fim de jogo");
+        } 
+    }
+    #endregion
+
+    #region RESPAWN
+    public void Respawn()
+    {
+        characterController.enabled = false;
+        transform.position = CheckpointManager.Instance.GetPositionFromLastCheckpoint();
+        characterController.enabled = true;
+
+        animator.SetTrigger("Revive");
+    }
+
+    private void Revive()
+    {
+        healthBase.ResetLife();
+
+        _isDead = false;
+        colliders.ForEach(i => i.enabled = true);
+
+        Respawn();
+    }
+    #endregion
 }

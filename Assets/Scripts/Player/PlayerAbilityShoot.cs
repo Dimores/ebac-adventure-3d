@@ -47,6 +47,7 @@ public class PlayerAbilityShoot : PlayerAbilityBase
         inputs.Gameplay.Weapon2.performed += OnWeapon2Performed;
 
         player.healthBase.OnKill += OnPlayerKill;
+        player.healthBase.OnRevive += OnPlayerRevive;
     }
 
     protected override void RemoveListeners()
@@ -58,6 +59,7 @@ public class PlayerAbilityShoot : PlayerAbilityBase
         inputs.Gameplay.Weapon2.performed -= OnWeapon2Performed;
 
         player.healthBase.OnKill -= OnPlayerKill;
+        player.healthBase.OnRevive -= OnPlayerRevive;
     }
 
     private void OnShootPerformed(InputAction.CallbackContext context)
@@ -101,5 +103,10 @@ public class PlayerAbilityShoot : PlayerAbilityBase
         currentGun?.StopShoot();
 
         inputs.Disable();
+    }
+
+    private void OnPlayerRevive(HealthBase health)
+    {
+        inputs.Enable();
     }
 }
