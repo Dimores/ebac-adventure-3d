@@ -37,8 +37,11 @@ public class UITextFader : MonoBehaviour
     {
         _fadeSequence?.Kill();
 
-        _fadeSequence = DOTween.Sequence().Append(textToFade.DOFade(1f, fadeTime))    
-            .AppendInterval(waitTime)                   
-            .Append(textToFade.DOFade(0f, fadeTime));   
+        textToFade.color = new Color(textToFade.color.r, textToFade.color.g, textToFade.color.b, 0);
+
+        _fadeSequence = DOTween.Sequence()
+            .Append(textToFade.DOFade(1f, fadeTime))
+            .AppendInterval(waitTime)
+            .Append(textToFade.DOFade(0f, fadeTime));
     }
 }
