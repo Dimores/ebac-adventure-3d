@@ -34,6 +34,8 @@ public class PlayerAbilityShoot : PlayerAbilityBase
         {
             gunLimit.RefreshUI();
         }
+
+
     }
 
     protected override void RegisterListeners()
@@ -43,6 +45,8 @@ public class PlayerAbilityShoot : PlayerAbilityBase
 
         inputs.Gameplay.Weapon1.performed += OnWeapon1Performed;
         inputs.Gameplay.Weapon2.performed += OnWeapon2Performed;
+
+        player.healthBase.OnKill += OnPlayerKill;
     }
 
     protected override void RemoveListeners()
@@ -52,6 +56,8 @@ public class PlayerAbilityShoot : PlayerAbilityBase
 
         inputs.Gameplay.Weapon1.performed -= OnWeapon1Performed;
         inputs.Gameplay.Weapon2.performed -= OnWeapon2Performed;
+
+        player.healthBase.OnKill -= OnPlayerKill;
     }
 
     private void OnShootPerformed(InputAction.CallbackContext context)
@@ -88,5 +94,12 @@ public class PlayerAbilityShoot : PlayerAbilityBase
         {
             gunLimit.RefreshUI();
         }
+    }
+
+    private void OnPlayerKill(HealthBase health)
+    {
+        currentGun?.StopShoot();
+
+        inputs.Disable();
     }
 }

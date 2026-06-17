@@ -9,7 +9,7 @@ public class GunShootLimit : GunBase
     public float timeToReload = 1f;
 
     [Header("Gun UI")]
-    public List<UIGunUpdater> uIGunUpdaters;
+    public List<UIFillUpdater> uIGunUpdaters;
 
     protected int _currentShoots;
     protected bool _isReloading;

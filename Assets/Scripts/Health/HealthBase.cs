@@ -12,6 +12,9 @@ public class HealthBase : MonoBehaviour, IDamageable
 
     [SerializeField] private float _currentLife;
 
+    [Header("UI")]
+    [SerializeField] private List<UIFillUpdater> uiFillUpdaters;
+
     public Action<HealthBase> OnDamage;
     public Action<HealthBase> OnKill;
 
@@ -37,6 +40,7 @@ public class HealthBase : MonoBehaviour, IDamageable
         if (_currentLife <= 0)
             Kill();
 
+        UpdateUI();
         OnDamage?.Invoke(this);
     }
 
@@ -50,5 +54,13 @@ public class HealthBase : MonoBehaviour, IDamageable
     public void Damage(float damage, Vector3 dir)
     {
         Damage(damage);
+    }
+
+    private void UpdateUI()
+    {
+        if (uiFillUpdaters != null)
+        {
+            uiFillUpdaters.ForEach(i => i.UpdateValue(startLife, startLife - _currentLife));
+        }
     }
 }

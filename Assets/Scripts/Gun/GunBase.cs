@@ -13,6 +13,8 @@ public class GunBase : MonoBehaviour
 
     private float _nextShootTime;
 
+    private Player _player;
+
     protected virtual IEnumerator ShootCoroutine()
     {
         while (true)

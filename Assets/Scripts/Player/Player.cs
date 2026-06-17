@@ -31,6 +31,10 @@ public class Player : MonoBehaviour
 
     private bool _isDead = false;
 
+    #region PROPERTIES
+    public bool IsDead {  get { return _isDead; } }
+    #endregion
+
     private void OnValidate()
     {
         if(healthBase == null) healthBase = GetComponent<HealthBase>();

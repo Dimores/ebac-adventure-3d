@@ -6,5 +6,5 @@ using UnityEngine;
 public class UIUpdaterManager : Singleton<UIUpdaterManager>
 {
     [Header("Gun UI")]
-    public List<UIGunUpdater> uIGunUpdaters;
+    public List<UIFillUpdater> uIGunUpdaters;
 }
