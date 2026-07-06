@@ -87,6 +87,8 @@ public class Player : MonoBehaviour
     {
         flashColors.ForEach(flashColor => flashColor.Flash());
         EffectsManager.Instance.ChangeVignette();
+
+        ShakeCamera.Instance.Shake();
     }
 
     public void Damage(float damage, Vector3 dir)
