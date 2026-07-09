@@ -36,6 +36,13 @@ public class HealthBase : MonoBehaviour, IDamageable
         OnRevive?.Invoke(this);
     }
 
+    public void Heal(float amount)
+    {
+        _currentLife += amount;
+        if (_currentLife > startLife) _currentLife = startLife;
+        UpdateUI();
+    }
+
     public void Damage(float f)
     {
         _currentLife -= f;

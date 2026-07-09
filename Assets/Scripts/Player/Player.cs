@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ebac.Core.Singleton;
 
-public class Player : MonoBehaviour
+public class Player : Singleton<Player>
 {
     [Header("References")]
     public CharacterController characterController;
@@ -44,7 +45,7 @@ public class Player : MonoBehaviour
         if(healthBase == null) healthBase = GetComponent<HealthBase>();
     }
 
-    private void Awake()
+    private void Start()
     {
         OnValidate();
 
