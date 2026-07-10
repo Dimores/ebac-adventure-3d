@@ -12771,6 +12771,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5531986718136724959, guid: 89e20167823a30d459856414377997d1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1755247081}
+    - targetCorrespondingSourceObject: {fileID: 5531986718136724959, guid: 89e20167823a30d459856414377997d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1755247087}
     - targetCorrespondingSourceObject: {fileID: 8780113881676022535, guid: 89e20167823a30d459856414377997d1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 584078116}
@@ -12809,6 +12812,21 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5156129202013452133, guid: 89e20167823a30d459856414377997d1, type: 3}
   m_PrefabInstance: {fileID: 1755247079}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1755247087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755247080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68430df14fd26f43a3df9bec2ca3a2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mesh: {fileID: 584078115}
+  texture: {fileID: 2800000, guid: 253b5ef430dfb994db804bbdd0390803, type: 3}
+  shaderIdName: _EmissionMap
 --- !u!1001 &1765309616
 PrefabInstance:
   m_ObjectHideFlags: 0
