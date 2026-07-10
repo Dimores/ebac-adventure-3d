@@ -18,9 +18,17 @@ public class ItemCollectableCoin : ItemCollectableBase
     private Tween _rotationTween;
     private Tween _floatTween;
 
+    private Rigidbody _rb;
+
+    private void Awake()
+    {
+        _rb = GetComponent<Rigidbody>();
+    }
+
     private void Start()
     {
-        AnimateCoin();
+        if(_rb == null)
+            AnimateCoin();
     }
 
     private void AnimateCoin()
@@ -28,6 +36,12 @@ public class ItemCollectableCoin : ItemCollectableBase
         _floatTween = transform.DOMoveY(transform.position.y + floatHeight, floatDuration)
             .SetLoops(-1, LoopType.Yoyo)
             .SetEase(Ease.InOutSine);
+    }
+
+    public void KillAnimations()
+    {
+        _rotationTween?.Kill();
+        _floatTween?.Kill();
     }
 
     protected override void OnCollect()
