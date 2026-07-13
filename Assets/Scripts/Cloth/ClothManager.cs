@@ -8,6 +8,8 @@ namespace Cloth
     public enum ClothType
     {
         SPEED,
+        STRONG,
+        JUMP
     }
 
     public class ClothManager : Singleton<ClothManager>

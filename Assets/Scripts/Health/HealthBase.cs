@@ -1,4 +1,5 @@
 using Animation;
+using Cloth;
 using DG.Tweening;
 using System;
 using System.Collections;
@@ -11,6 +12,7 @@ public class HealthBase : MonoBehaviour, IDamageable
     public bool destroyOnKill = false;
 
     [SerializeField] private float _currentLife;
+    public float damageMultiply = 1f;
 
     [Header("UI")]
     [SerializeField] private List<UIFillUpdater> uiFillUpdaters;
@@ -45,7 +47,7 @@ public class HealthBase : MonoBehaviour, IDamageable
 
     public void Damage(float f)
     {
-        _currentLife -= f;
+        _currentLife -= f * damageMultiply;
 
         if (_currentLife <= 0)
             Kill();
@@ -72,5 +74,17 @@ public class HealthBase : MonoBehaviour, IDamageable
         {
             uiFillUpdaters.ForEach(i => i.UpdateValue(startLife, startLife - _currentLife));
         }
+    }
+
+    public void ChangeDamageMultiply(float damageMultiply, float duration)
+    {
+        StartCoroutine(SetDamageMultiplyCoroutine(damageMultiply, duration));
+    }
+
+    IEnumerator SetDamageMultiplyCoroutine(float damageMultiply, float duration)
+    {
+        this.damageMultiply = damageMultiply;
+        yield return new WaitForSeconds(duration);
+        this.damageMultiply = 1f;
     }
 }

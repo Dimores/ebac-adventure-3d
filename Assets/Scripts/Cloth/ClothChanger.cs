@@ -1,45 +1,74 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cloth;
 
 namespace Cloth
 {
     public class ClothChanger : MonoBehaviour
     {
-        public SkinnedMeshRenderer mesh;
+        public List<SkinnedMeshRenderer> mesh;
 
         public Texture2D texture;
         public string shaderIdName = "_EmissionMap";
 
-        private Texture2D _defaultTexture;
+        private List<Texture> _defaultTextures = new List<Texture>();
 
         private void Awake()
         {
-            _defaultTexture = (Texture2D) mesh.materials[0].GetTexture(shaderIdName);
+            _defaultTextures.Clear();
+
+            foreach (var renderer in mesh)
+            {
+                if (renderer != null &&
+                    renderer.materials.Length > 0)
+                {
+                    _defaultTextures.Add(renderer.materials[0].GetTexture(shaderIdName));
+                }
+                else
+                {
+                    _defaultTextures.Add(null);
+                }
+            }
         }
 
         public void ChangeTexture()
         {
-            if (mesh != null && texture != null)
+            if (texture == null)
+                return;
+
+            foreach (var renderer in mesh)
             {
-                mesh.materials[0].SetTexture(shaderIdName, texture);
+                if (renderer != null &&
+                    renderer.materials.Length > 0)
+                {
+                    renderer.materials[0].SetTexture(shaderIdName, texture);
+                }
             }
         }
-        
+
         public void ChangeTexture(ClothSetup clothSetup)
         {
-            if (mesh != null && clothSetup != null)
+            if (clothSetup == null || clothSetup.texture == null)
+                return;
+
+            foreach (var renderer in mesh)
             {
-                mesh.materials[0].SetTexture(shaderIdName, clothSetup.texture);
+                if (renderer != null &&
+                    renderer.materials.Length > 0)
+                {
+                    renderer.materials[0].SetTexture(shaderIdName, clothSetup.texture);
+                }
             }
         }
 
         public void ResetTexture()
         {
-            if (mesh != null && _defaultTexture != null)
+            for (int i = 0; i < mesh.Count; i++)
             {
-                mesh.materials[0].SetTexture(shaderIdName, _defaultTexture);
+                if (mesh[i] != null &&
+                    mesh[i].materials.Length > 0)
+                {
+                    mesh[i].materials[0].SetTexture(shaderIdName, _defaultTextures[i]);
+                }
             }
         }
     }

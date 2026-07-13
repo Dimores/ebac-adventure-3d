@@ -71,6 +71,22 @@ public class Player : Singleton<Player>
         yield return new WaitForSeconds(duration);
         _clothChanger.ResetTexture();
     }
+
+    public void SetJump(float value, float duration)
+    {
+        StartCoroutine(SetJumpCoroutine(value, duration));
+    }
+
+    IEnumerator SetJumpCoroutine(float value, float duration)
+    {
+        float defaultJump = jumpSpeed;
+
+        jumpSpeed *= 1f + value / 100f;
+
+        yield return new WaitForSeconds(duration);
+
+        jumpSpeed = defaultJump;
+    }
     #endregion
 
     #region UNITY_METHODS
