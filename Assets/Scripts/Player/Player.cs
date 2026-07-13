@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Ebac.Core.Singleton;
+using Cloth;
 
 public class Player : Singleton<Player>
 {
@@ -24,6 +25,9 @@ public class Player : Singleton<Player>
 
     [Header("Colliders")]
     [SerializeField] private List<Collider> colliders;
+
+    [Header("Cloth")]
+    [SerializeField] private ClothChanger _clothChanger;
 
     [Header("Flash")]
     public List<FlashColor> flashColors;
@@ -51,9 +55,21 @@ public class Player : Singleton<Player>
     {
         var defaultSpeed = speed;
 
-        speed = value;
+        speed *= 1f + value / 100f;
         yield return new WaitForSeconds(duration);
         speed = defaultSpeed;
+    }
+
+    public void ChangeTexture(ClothSetup setup, float duration)
+    {
+        StartCoroutine(SetTextureCoroutine(setup, duration));
+    }
+
+    IEnumerator SetTextureCoroutine(ClothSetup setup, float duration)
+    {
+        _clothChanger.ChangeTexture(setup);
+        yield return new WaitForSeconds(duration);
+        _clothChanger.ResetTexture();
     }
     #endregion
 
