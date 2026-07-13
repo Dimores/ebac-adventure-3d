@@ -11,7 +11,7 @@ public class Player : Singleton<Player>
     public Animator animator;
 
     [Header("Movement Settings")]
-    public float speed = 1f; 
+    [SerializeField] private float speed = 1f; 
     public float turnSpeed = 1f; 
     public float gravity = 9.8f;
     public float jumpSpeed = 15f;
@@ -36,6 +36,25 @@ public class Player : Singleton<Player>
 
     #region PROPERTIES
     public bool IsDead {  get { return _isDead; } }
+
+    public void SetSpeed(float value)
+    {
+        speed = value;
+    }
+
+    public void SetSpeed(float value, float duration)
+    {
+        StartCoroutine(SetSpeedCoroutine(value, duration));
+    }
+
+    IEnumerator SetSpeedCoroutine(float value, float duration)
+    {
+        var defaultSpeed = speed;
+
+        speed = value;
+        yield return new WaitForSeconds(duration);
+        speed = defaultSpeed;
+    }
     #endregion
 
     #region UNITY_METHODS

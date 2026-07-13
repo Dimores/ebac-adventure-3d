@@ -1,18 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ebac.Core.Singleton;
 
-public class ClothManager : MonoBehaviour
+namespace Cloth
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum ClothType
     {
-        
+        SPEED,
     }
 
-    // Update is called once per frame
-    void Update()
+    public class ClothManager : Singleton<ClothManager>
     {
-        
+        public List<ClothSetup> clothSetups;
+
+        public ClothSetup GetSetupByType(ClothType clothType)
+        {
+            return clothSetups.Find(setup => setup.clothType == clothType);
+        }
     }
+
+    [System.Serializable]
+    public class ClothSetup
+    {
+        public ClothType clothType;
+        public Texture2D texture;
+    }
+        
 }
