@@ -8,6 +8,9 @@ public class PlayerAbilityShoot : PlayerAbilityBase
     [SerializeField] private GunBase gun2;
     [SerializeField] private Transform gunPosition;
 
+    [Header("Flash")]
+    [SerializeField] private FlashColor _flashColor;
+
     private GunBase[] guns;
     private GunBase currentGun;
     private int currentGunIndex;
@@ -27,6 +30,15 @@ public class PlayerAbilityShoot : PlayerAbilityBase
         guns[1].transform.localPosition = Vector3.zero;
         guns[1].transform.localRotation = Quaternion.identity;
 
+        // Inscreve no evento das armas instanciadas
+        foreach (var gun in guns)
+        {
+            if (gun != null)
+            {
+                gun.OnShoot += TriggerFlash;
+            }
+        }
+
         currentGun = guns[0];
         currentGunIndex = 0;
 
@@ -34,8 +46,6 @@ public class PlayerAbilityShoot : PlayerAbilityBase
         {
             gunLimit.RefreshUI();
         }
-
-
     }
 
     protected override void RegisterListeners()
@@ -60,16 +70,34 @@ public class PlayerAbilityShoot : PlayerAbilityBase
 
         player.healthBase.OnKill -= OnPlayerKill;
         player.healthBase.OnRevive -= OnPlayerRevive;
+
+        // Desinscreve das armas para boas práticas
+        if (guns != null)
+        {
+            foreach (var gun in guns)
+            {
+                if (gun != null)
+                {
+                    gun.OnShoot -= TriggerFlash;
+                }
+            }
+        }
     }
 
     private void OnShootPerformed(InputAction.CallbackContext context)
     {
         currentGun?.StartShoot();
+        // O _flashColor?.Flash() foi removido daqui e passado para o TriggerFlash
     }
 
     private void OnShootCanceled(InputAction.CallbackContext context)
     {
         currentGun?.StopShoot();
+    }
+
+    private void TriggerFlash()
+    {
+        _flashColor?.Flash();
     }
 
     private void OnWeapon1Performed(InputAction.CallbackContext context)
@@ -101,7 +129,6 @@ public class PlayerAbilityShoot : PlayerAbilityBase
     private void OnPlayerKill(HealthBase health)
     {
         currentGun?.StopShoot();
-
         inputs.Disable();
     }
 

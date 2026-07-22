@@ -38,6 +38,8 @@ public class Player : Singleton<Player>
 
     private bool _isDead = false;
 
+    private bool _jumping = false;
+
     #region PROPERTIES
     public bool IsDead {  get { return _isDead; } }
 
@@ -115,9 +117,22 @@ public class Player : Singleton<Player>
         var speedVector = characterTransform.forward * inputAxisVertical * speed;
 
         if(characterController.isGrounded) {
+
+            if(_jumping)
+            {
+                _jumping = false;
+                animator.SetTrigger("Land");
+            }
+
             vSpeed = 0f;
             if (Input.GetButtonDown(jump)) {
                 vSpeed = jumpSpeed;
+
+                if (!_jumping)
+                {
+                    _jumping = true;
+                    animator.SetTrigger("Jump");
+                }
             }
         }
 

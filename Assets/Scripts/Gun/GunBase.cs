@@ -1,18 +1,18 @@
+using System; // <- Importante para usar o Action
 using System.Collections;
 using UnityEngine;
 
 public class GunBase : MonoBehaviour
 {
-    public ProjectileBase prefabProjectile;
+    public event Action OnShoot; // Evento do tiro
 
+    public ProjectileBase prefabProjectile;
     public Transform positionToShoot;
     public float timeBeetweenShoot = .3f;
     public float speed = 50f;
 
     protected Coroutine _currentCoroutine;
-
     private float _nextShootTime;
-
     private Player _player;
 
     protected virtual IEnumerator ShootCoroutine()
@@ -20,7 +20,6 @@ public class GunBase : MonoBehaviour
         while (true)
         {
             Shoot();
-
             yield return new WaitForSeconds(timeBeetweenShoot);
         }
     }
@@ -40,10 +39,11 @@ public class GunBase : MonoBehaviour
             return;
 
         var projectile = Instantiate(prefabProjectile);
-
         projectile.transform.position = positionToShoot.position;
         projectile.transform.rotation = positionToShoot.rotation;
         projectile.speed = speed;
+
+        OnShoot?.Invoke();
     }
 
     public void StartShoot()
