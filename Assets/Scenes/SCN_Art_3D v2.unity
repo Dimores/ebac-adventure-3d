@@ -29693,6 +29693,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5384585102057202729, guid: 5960f3f54a66c094ab12349a2dab83e0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 338da75e00bc37b48847519829356552, type: 2}
     - target: {fileID: 6689417312523494889, guid: 5960f3f54a66c094ab12349a2dab83e0, type: 3}
       propertyPath: m_Name
       value: PFB_DestructableItem
