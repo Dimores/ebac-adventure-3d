@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using NaughtyAttributes;
+using Sound;
 
 public class DestructableItemBase : MonoBehaviour
 {
@@ -73,6 +74,8 @@ public class DestructableItemBase : MonoBehaviour
 
     private void OnDamage(HealthBase h)
     {
+        SFXPool.Instance.Play(SFXType.TYPE_02, new Vector2(0.8f, 1.2f));
+
         transform.DOKill();
 
         Vector3 randomPunch = new Vector3(

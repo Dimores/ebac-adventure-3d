@@ -1,7 +1,6 @@
 using Sound;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using Ebac.Core.Singleton;
 using UnityEngine.Audio;
@@ -49,6 +48,20 @@ public class SFXPool : Singleton<SFXPool>
         var sfx = SoundManager.Instance.GetSFXByType(sfxType);
 
         _audioSourceList[_index].clip = sfx.audioClip;
+        _audioSourceList[_index].Play();
+
+        _index++;
+        if (_index >= _audioSourceList.Count) _index = 0;
+    }
+
+    public void Play(SFXType sfxType, Vector2 random)
+    {
+        if (sfxType == SFXType.NONE) return;
+
+        var sfx = SoundManager.Instance.GetSFXByType(sfxType);
+
+        _audioSourceList[_index].clip = sfx.audioClip;
+        _audioSourceList[_index].pitch = Random.Range(random.x, random.y);
         _audioSourceList[_index].Play();
 
         _index++;

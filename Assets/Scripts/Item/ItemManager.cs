@@ -4,8 +4,6 @@ using UnityEngine;
 using Ebac.Core.Singleton;
 using TMPro;
 using UnityEngine.Events;
-using Unity.Collections;
-using UnityEditor.UIElements;
 using Save;
 
 namespace Items

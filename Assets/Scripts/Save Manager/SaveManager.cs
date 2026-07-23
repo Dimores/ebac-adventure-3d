@@ -176,7 +176,7 @@ namespace Save
 
                 clothType = (int)ClothType.SPEED,
 
-                playerHealth = 10
+                playerHealth = 50
             };
 
             Save();

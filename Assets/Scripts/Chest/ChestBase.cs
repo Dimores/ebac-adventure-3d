@@ -53,12 +53,14 @@ public class ChestBase : MonoBehaviour
     private void ShowItem()
     {
         chestItem.ShowItem();
+
         Invoke(nameof(CollectItem), 0.5f);
     }
 
     private void CollectItem()
     {
         chestItem.Collect();
+        SFXPool.Instance.Play(Sound.SFXType.TYPE_03);
     }
 
     private void OnTriggerEnter(Collider other)
