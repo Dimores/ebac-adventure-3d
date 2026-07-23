@@ -153,7 +153,7 @@ public class Player : Singleton<Player>
                 animator.SetTrigger("Land");
             }
 
-            vSpeed = 0f;
+            vSpeed = -1f;
             if (Input.GetButtonDown(jump)) {
                 vSpeed = jumpSpeed;
 

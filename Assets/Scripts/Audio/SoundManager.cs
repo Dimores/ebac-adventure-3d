@@ -51,6 +51,7 @@ namespace Sound
         TYPE_01,
         TYPE_02,
         TYPE_03,
+        NONE
     }
 
 

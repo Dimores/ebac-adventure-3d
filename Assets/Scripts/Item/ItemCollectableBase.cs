@@ -1,3 +1,4 @@
+using Sound;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,9 @@ namespace Items
     {
         [Header("Item Type")]
         public ItemType itemType;
+
+        [Header("SFX Type")]
+        public SFXType sfxType;
 
         [Header("Collider")]
         public Collider itemCollider;
@@ -29,8 +33,14 @@ namespace Items
             }
         }
 
+        private void PlaySFX()
+        {
+            SFXPool.Instance.Play(sfxType);
+        }
+
         protected virtual void Collect()
         {
+            PlaySFX();
             if (visual != null) visual.SetActive(false);
             Collider2D collider = GetComponent<Collider2D>();
             if (collider != null) collider.enabled = false;
