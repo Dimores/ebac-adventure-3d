@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ebac.Core.Singleton;
 using Cloth;
+using Save;
 
 public class Player : Singleton<Player>
 {
@@ -40,8 +41,10 @@ public class Player : Singleton<Player>
 
     private bool _jumping = false;
 
+
     #region PROPERTIES
     public bool IsDead {  get { return _isDead; } }
+    public ClothType CurrentClothType { get; private set; }
 
     public void SetSpeed(float value)
     {
@@ -64,14 +67,22 @@ public class Player : Singleton<Player>
 
     public void ChangeTexture(ClothSetup setup, float duration)
     {
+        CurrentClothType = setup.clothType;
+
         StartCoroutine(SetTextureCoroutine(setup, duration));
     }
 
-    IEnumerator SetTextureCoroutine(ClothSetup setup, float duration)
+    IEnumerator SetTextureCoroutine(
+        ClothSetup setup,
+        float duration)
     {
         _clothChanger.ChangeTexture(setup);
+
         yield return new WaitForSeconds(duration);
+
         _clothChanger.ResetTexture();
+
+        CurrentClothType = ClothType.NONE;
     }
 
     public void SetJump(float value, float duration)
@@ -89,6 +100,16 @@ public class Player : Singleton<Player>
 
         jumpSpeed = defaultJump;
     }
+
+    public void ApplySavedCloth(ClothSetup setup)
+    {
+        CurrentClothType = setup.clothType;
+
+        _clothChanger.ChangeTexture(setup);
+    }
+
+
+
     #endregion
 
     #region UNITY_METHODS
@@ -106,7 +127,15 @@ public class Player : Singleton<Player>
         healthBase.OnKill += Kill;
 
         _isDead = false;
+
+        LoadSavedCloth();
+        LoadSavedHealth();
+
+        CheckpointManager.Instance.LoadCheckpoint(
+            SaveManager.Instance.GetSavedCheckpoint()
+        );
     }
+
     void Update() {
 
         if (_isDead) return;
@@ -150,6 +179,19 @@ public class Player : Singleton<Player>
     #endregion
 
     #region LIFE
+    private void LoadSavedHealth()
+    {
+        float savedHealth = SaveManager.Instance.GetSavedHealth();
+
+        if (savedHealth <= 0)
+        {
+            healthBase.ResetLife();
+            return;
+        }
+
+        healthBase.SetHealth(savedHealth);
+    }
+
     public void Damage(HealthBase h)
     {
         flashColors.ForEach(flashColor => flashColor.Flash());
@@ -199,6 +241,20 @@ public class Player : Singleton<Player>
         colliders.ForEach(i => i.enabled = true);
 
         Respawn();
+    }
+    #endregion
+
+    #region CLOTH
+    private void LoadSavedCloth()
+    {
+        ClothType savedCloth = SaveManager.Instance.GetSavedCloth();
+
+        if (savedCloth == ClothType.NONE)
+            return;
+
+        ClothSetup setup = ClothManager.Instance.GetSetupByType(savedCloth);
+
+        ChangeTexture(setup, 5f);
     }
     #endregion
 }

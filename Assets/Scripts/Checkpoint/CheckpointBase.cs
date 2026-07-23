@@ -11,7 +11,6 @@ public class CheckpointBase : MonoBehaviour
     public int key = 01;
 
     private bool checkpointActive = false;
-    private string checkpointKey = "CheckpointKey";
 
     private void OnTriggerEnter(Collider other)
     {
@@ -40,17 +39,9 @@ public class CheckpointBase : MonoBehaviour
     #region SAVE
     private void SaveCheckpoint()
     {
-        //if(PlayerPrefs.GetInt(checkpointKey, 0) > key)
-        //    PlayerPrefs.SetInt(checkpointKey, key);
-
         CheckpointManager.Instance.SaveCheckpoint(key);
 
         checkpointActive = true;
-    }
-
-    private void LoadCheckpoint()
-    {
-        PlayerPrefs.GetInt(checkpointKey, key);
     }
     #endregion
 }

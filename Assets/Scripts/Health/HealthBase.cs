@@ -1,6 +1,7 @@
 using Animation;
 using Cloth;
 using DG.Tweening;
+using Save;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,11 @@ public class HealthBase : MonoBehaviour, IDamageable
     public Action<HealthBase> OnDamage;
     public Action<HealthBase> OnKill;
     public Action<HealthBase> OnRevive;
+
+    public float CurrentHealth
+    {
+        get { return _currentLife; }
+    }
 
     private void Awake()
     {
@@ -42,6 +48,17 @@ public class HealthBase : MonoBehaviour, IDamageable
     {
         _currentLife += amount;
         if (_currentLife > startLife) _currentLife = startLife;
+        UpdateUI();
+    }
+
+    public void SetHealth(float health)
+    {
+        _currentLife = Mathf.Clamp(
+            health,
+            0f,
+            startLife
+        );
+
         UpdateUI();
     }
 

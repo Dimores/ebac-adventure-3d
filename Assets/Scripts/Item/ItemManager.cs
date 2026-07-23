@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.Events;
 using Unity.Collections;
 using UnityEditor.UIElements;
+using Save;
 
 namespace Items
 {
@@ -22,6 +23,13 @@ namespace Items
         private void Start()
         {
             Reset();
+            Invoke(nameof(LoadItemsFromSave), 0.1f);
+        }
+
+        public void LoadItemsFromSave()
+        {
+            AddByType(ItemType.COIN, (int) SaveManager.Instance.GetSaveSetup().coins);
+            AddByType(ItemType.LIFE_PACK, (int) SaveManager.Instance.GetSaveSetup().healthPacks);
         }
 
         private void Reset()

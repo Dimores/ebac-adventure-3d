@@ -9,7 +9,8 @@ namespace Cloth
     {
         SPEED,
         STRONG,
-        JUMP
+        JUMP,
+        NONE
     }
 
     public class ClothManager : Singleton<ClothManager>

@@ -2,6 +2,7 @@ using Animation;
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Enemy
 {
@@ -33,6 +34,9 @@ namespace Enemy
 
         [Header("VFX")]
         public ParticleSystem damageVFX;
+
+        [Header("Events")]
+        public UnityEvent OnKillEvent;
 
         protected Player _player;
 
@@ -101,6 +105,8 @@ namespace Enemy
             Destroy(gameObject, deathDelay);
 
             PlayAnimationByType(AnimationType.DEATH);
+
+            OnKillEvent?.Invoke();
         }
 
         #region ANIMATION

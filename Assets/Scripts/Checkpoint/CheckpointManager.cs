@@ -4,6 +4,7 @@ using System.Net.NetworkInformation;
 using Ebac.Core.Singleton;
 using NaughtyAttributes;
 using UnityEngine;
+using Save;
 
 public class CheckpointManager : Singleton<CheckpointManager>
 {
@@ -48,8 +49,20 @@ public class CheckpointManager : Singleton<CheckpointManager>
         if (i > lastCheckpointKey)
         {
             lastCheckpointKey = i;
+
+            SaveManager.Instance.SaveCheckpoint(
+                lastCheckpointKey,
+                Player.Instance.healthBase.CurrentHealth,
+                Player.Instance.CurrentClothType
+            );
+
             ShowCheckpointOnUI(textPrefix);
         }
+    }
+
+    public void LoadCheckpoint(int checkpointKey)
+    {
+        lastCheckpointKey = checkpointKey;
     }
 
     public Vector3 GetPositionFromLastCheckpoint()
